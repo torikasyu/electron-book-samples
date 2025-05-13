@@ -1,58 +1,64 @@
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
+import * as url from 'url';
 
-// メインウィンドウの参照をグローバルに保持
+// アプリケーションのメインウィンドウを保持する変数
 let mainWindow: BrowserWindow | null = null;
+
+// 開発モードかどうかを判定
+const isDev = process.env.NODE_ENV === 'development';
 
 /**
  * メインウィンドウを作成する関数
  */
-function createWindow() {
+const createWindow = (): void => {
   // ブラウザウィンドウを作成
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      // プリロードスクリプトのパス
-      preload: path.join(__dirname, 'preload.js'),
-      // コンテキスト分離を有効に
-      contextIsolation: true,
-      // Node.js APIをレンダラープロセスで直接利用することを禁止
-      nodeIntegration: false,
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
-  // メインウィンドウに表示するHTMLファイルをロード
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  // HTMLファイルをロード
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true,
+    })
+  );
 
-  // 開発時は開発者ツールを開く
-  if (process.env.NODE_ENV === 'development') {
+  // 開発モードの場合は開発者ツールを開く
+  if (isDev) {
     mainWindow.webContents.openDevTools();
   }
 
   // ウィンドウが閉じられたときの処理
   mainWindow.on('closed', () => {
-    // ウィンドウオブジェクトの参照を破棄
     mainWindow = null;
   });
-}
+};
 
-// Electronの初期化が完了したらウィンドウを作成
-app.whenReady().then(() => {
-  createWindow();
-
-  // macOSではドックアイコンクリック時にウィンドウがない場合は新しく作成
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
+// アプリケーションの準備が整ったらウィンドウを作成
+app.on('ready', createWindow);
 
 // すべてのウィンドウが閉じられたときの処理
 app.on('window-all-closed', () => {
-  // macOS以外ではアプリを終了
+  // macOSでは、ユーザーがCmd + Qで明示的に終了するまで
+  // アプリケーションとそのメニューバーは有効なままにするのが一般的
   if (process.platform !== 'darwin') {
     app.quit();
+  }
+});
+
+// アプリケーションがアクティブになったときの処理（macOS）
+app.on('activate', () => {
+  // macOSでは、ドックアイコンがクリックされてほかにウィンドウが
+  // 開いていないときに、アプリケーションでウィンドウを再作成するのが一般的
+  if (mainWindow === null) {
+    createWindow();
   }
 });
