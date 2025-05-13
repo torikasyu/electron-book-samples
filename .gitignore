@@ -56,3 +56,6 @@ coverage/
 # Supabase関連（chapter06用）
 supabase/.branches/
 supabase/.temp/
+
+# 書籍のシンボリックリンク
+/book
