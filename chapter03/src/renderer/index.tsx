@@ -2,11 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-// Reactのルート要素を作成
-const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error('Failed to find the root element');
+const container = document.getElementById('root') as HTMLElement;
+const root = ReactDOM.createRoot(container);
 
-const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <App />

@@ -1,14 +1,7 @@
 {
-  "name": "electron-react-sample",
+  "name": "electron-react-typescript",
   "version": "1.0.0",
-  "description": "Minimal Electron + React + TypeScript + webpack sample",
-  "main": "dist/main.js",
-  "scripts": {
-    "build": "webpack --mode=production",
-    "dev": "webpack --mode=development && electron .",
-    "watch": "webpack --mode=development --watch",
-    "start": "electron ."
-  },
+  "description": "Electron + React + TypeScript サンプルアプリケーション",
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
@@ -22,5 +15,12 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack --mode=development && electron .",
+    "watch": "webpack --mode=development --watch",
+    "start": "electron ."
   }
 }

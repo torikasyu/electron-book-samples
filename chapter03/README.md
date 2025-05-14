@@ -1,76 +1,67 @@
-# Electron + React + TypeScript サンプルアプリケーション
+# Electron + React + TypeScript + webpack 最小サンプル
 
-これは、Electron、React、TypeScriptを使用した基本的なカウンターアプリケーションのサンプルです。
+React、Electron、TypeScript、webpackを組み合わせた最小構成のサンプルアプリケーションです。
 
-## 機能
-
-- シンプルなカウンターアプリケーション
-- カウントアップとリセット機能
-- Electron + React + TypeScriptの基本的な構成
-
-## 必要条件
-
-- Node.js (バージョン 14.x 以上)
-- npm (バージョン 6.x 以上)
-
-## インストール
-
-リポジトリをクローンした後、以下のコマンドを実行して依存関係をインストールします：
+## セットアップ
 
 ```bash
+cd electron-react-sample
 npm install
 ```
 
 ## 開発
 
-開発モードでアプリケーションを実行するには、以下のコマンドを実行します：
-
-```bash
-npm run dev
-```
-
-このコマンドは、Webpackを使用してファイルをビルドし、Electronアプリケーションを起動します。ファイルを変更すると、自動的に再ビルドされます。
-
-## ビルド
-
-アプリケーションをビルドするには、以下のコマンドを実行します：
-
+### ビルド
 ```bash
 npm run build
 ```
 
-ビルドされたファイルは `dist` ディレクトリに出力されます。
-
-## 実行
-
-ビルド後、アプリケーションを実行するには、以下のコマンドを実行します：
-
+### 開発モード（ビルド後にElectronを起動）
 ```bash
+npm run dev
+```
+
+### ファイル監視モード（開発時推奨）
+```bash
+# ターミナル1: webpackでファイル監視
+npm run watch
+
+# ターミナル2: Electronアプリ起動
 npm start
 ```
 
-## プロジェクト構造
+## プロジェクト構成
 
 ```
-electron-react-typescript/
-├── src/                      # ソースコード
-│   ├── main/                 # メインプロセス関連のコード
-│   │   └── main.ts           # メインプロセスのエントリーポイント
-│   └── renderer/             # レンダラープロセス関連のコード
-│       ├── components/       # UIコンポーネント
-│       ├── App.tsx           # メインのReactコンポーネント
-│       ├── index.html        # HTMLテンプレート
-│       └── index.tsx         # レンダラープロセスのエントリーポイント
-├── config/                   # 設定ファイル
-│   ├── webpack.main.js       # メインプロセス用Webpack設定
-│   └── webpack.renderer.js   # レンダラープロセス用Webpack設定
-├── .eslintrc.js              # ESLint設定
-├── .prettierrc               # Prettier設定
-├── package.json              # プロジェクト設定
-├── tsconfig.json             # TypeScript設定
-└── webpack.config.js         # Webpack設定
+electron-react-sample/
+├── package.json          # パッケージ設定
+├── tsconfig.json         # TypeScript設定
+├── webpack.config.js     # webpack設定（メイン・レンダラー）
+├── src/
+│   ├── main/
+│   │   └── main.ts       # Electronメインプロセス
+│   ├── renderer/
+│   │   ├── index.html    # HTMLテンプレート
+│   │   ├── index.tsx     # Reactエントリポイント
+│   │   └── App.tsx       # メインコンポーネント
+│   └── types/
+│       └── global.d.ts   # グローバル型定義
+└── dist/                 # ビルド出力先
+    ├── main.js
+    └── renderer/
 ```
 
-## ライセンス
+## 主な特徴
 
-MIT
+- **最小構成**: 必要最小限のファイルで構成
+- **TypeScript**: 型安全なコード記述
+- **webpack**: メインプロセスとレンダラープロセスを個別にバンドル
+- **React**: モダンなReact 18を使用
+- **セキュア**: `nodeIntegration: false`, `contextIsolation: true`で設定
+
+## カスタマイズポイント
+
+- `src/main/main.ts`: Electronメインプロセスの処理
+- `src/renderer/App.tsx`: Reactアプリケーションのメインコンポーネント
+- `webpack.config.js`: バンドル設定（CSS、画像等の追加も可能）
+- `tsconfig.json`: TypeScriptコンパイル設定

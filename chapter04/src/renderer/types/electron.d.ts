@@ -9,9 +9,6 @@ declare global {
       
       // システム情報を取得
       getSystemInfo: () => Promise<SystemInfo>;
-      
-      // IPCイベントの購読
-      on: (channel: string, callback: (...args: any[]) => void) => (() => void) | undefined;
     }
   }
 }

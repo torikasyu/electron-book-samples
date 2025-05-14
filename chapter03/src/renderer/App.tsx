@@ -1,55 +1,33 @@
 import React, { useState } from 'react';
-import Counter from './components/Counter';
 
-/**
- * アプリケーションのメインコンポーネント
- */
 const App: React.FC = () => {
-  // カウンター用のステート
   const [count, setCount] = useState<number>(0);
 
-  // カウントアップ関数
-  const incrementCount = (): void => {
-    setCount((prevCount) => prevCount + 1);
-  };
-
-  // リセット関数
-  const resetCount = (): void => {
-    setCount(0);
-  };
+  const increment = () => setCount(count + 1);
+  const decrement = () => setCount(count - 1);
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Electron + React + TypeScript サンプル</h1>
-      <p style={styles.description}>
-        これは、Electron、React、TypeScriptを使用したシンプルなカウンターアプリケーションです。
-      </p>
-      <Counter 
-        count={count} 
-        onIncrement={incrementCount} 
-        onReset={resetCount} 
-      />
+    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+      <h1>Electron + React + TypeScript App</h1>
+      
+      <div style={{ marginTop: '20px' }}>
+        <h2>カウンター</h2>
+        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>Count: {count}</p>
+        <button 
+          onClick={increment} 
+          style={{ marginRight: '10px', padding: '8px 16px' }}
+        >
+          +1
+        </button>
+        <button 
+          onClick={decrement}
+          style={{ padding: '8px 16px' }}
+        >
+          -1
+        </button>
+      </div>
     </div>
   );
-};
-
-// スタイル定義
-const styles = {
-  container: {
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-    maxWidth: '600px',
-    margin: '0 auto',
-  },
-  heading: {
-    color: '#333',
-    textAlign: 'center' as const,
-  },
-  description: {
-    color: '#666',
-    marginBottom: '20px',
-    textAlign: 'center' as const,
-  },
 };
 
 export default App;
