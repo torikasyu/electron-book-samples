@@ -16,13 +16,11 @@ const api = {
   // 画像関連
   images: {
     // 画像をアップロード
-    upload: (tags: string[]) => ipcRenderer.invoke(IpcChannels.UPLOAD_IMAGE, tags),
+    upload: () => ipcRenderer.invoke(IpcChannels.UPLOAD_IMAGE),
     // 画像一覧を取得
     getAll: () => ipcRenderer.invoke(IpcChannels.GET_IMAGES),
     // 画像を削除
-    delete: (imageId: string, fileName: string) => ipcRenderer.invoke(IpcChannels.DELETE_IMAGE, imageId, fileName),
-    // 画像情報を更新
-    update: (imageId: string, updates: Partial<ImageInfo>) => ipcRenderer.invoke(IpcChannels.UPDATE_IMAGE, imageId, updates)
+    delete: (fileName: string) => ipcRenderer.invoke(IpcChannels.DELETE_IMAGE, fileName),
   }
 };
 

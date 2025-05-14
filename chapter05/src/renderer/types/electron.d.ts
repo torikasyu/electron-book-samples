@@ -7,17 +7,20 @@ declare global {
         get: () => Promise<{
           supabaseUrl: string;
           supabaseAnonKey: string;
+          supabaseBucket: string;
         }>;
         update: (newConfig: {
           supabaseUrl?: string;
           supabaseAnonKey?: string;
+          supabaseBucket?: string;
         }) => Promise<{
           supabaseUrl: string;
           supabaseAnonKey: string;
+          supabaseBucket: string;
         }>;
       };
       images: {
-        upload: (tags: string[]) => Promise<{
+        upload: () => Promise<{
           success: boolean;
           data?: ImageInfo;
           message?: string;
@@ -27,13 +30,8 @@ declare global {
           data?: ImageInfo[];
           message?: string;
         }>;
-        delete: (imageId: string, fileName: string) => Promise<{
+        delete: (fileName: string) => Promise<{
           success: boolean;
-          message?: string;
-        }>;
-        update: (imageId: string, updates: Partial<ImageInfo>) => Promise<{
-          success: boolean;
-          data?: ImageInfo;
           message?: string;
         }>;
       };

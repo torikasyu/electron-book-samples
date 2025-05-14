@@ -3,14 +3,13 @@ import { ImageInfo } from '../../shared/types';
 
 interface ImageCardProps {
   image: ImageInfo;
-  onDelete: (id: string, name: string) => void;
-  onEdit: (image: ImageInfo) => void;
+  onDelete: (name: string) => void;
 }
 
 /**
  * 画像カードコンポーネント
  */
-const ImageCard: React.FC<ImageCardProps> = ({ image, onDelete, onEdit }) => {
+const ImageCard: React.FC<ImageCardProps> = ({ image, onDelete }) => {
   // ファイルサイズをフォーマットする関数
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return bytes + ' B';
@@ -39,25 +38,11 @@ const ImageCard: React.FC<ImageCardProps> = ({ image, onDelete, onEdit }) => {
           <div>{formatFileSize(image.size)}</div>
           <div>{formatDate(image.createdAt)}</div>
         </div>
-        {image.tags && image.tags.length > 0 && (
-          <div className="tag-list">
-            {image.tags.map((tag, index) => (
-              <span key={index} className="tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+
         <div className="card-actions">
           <button
-            className="btn btn-primary"
-            onClick={() => onEdit(image)}
-          >
-            編集
-          </button>
-          <button
             className="btn btn-danger"
-            onClick={() => onDelete(image.id, image.name)}
+            onClick={() => onDelete(image.name)}
           >
             削除
           </button>

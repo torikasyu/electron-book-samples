@@ -11,12 +11,27 @@ let mainWindow: BrowserWindow | null = null;
 
 // Supabaseクライアントの初期化関数
 function initSupabaseClient() {
-  const config = getConfig();
-  if (!config.supabaseUrl || !config.supabaseAnonKey) {
-    console.error('Supabaseの設定が不足しています');
+  try {
+    const config = getConfig();
+    
+    // URLとAPIキーの存在確認
+    if (!config.supabaseUrl || !config.supabaseAnonKey) {
+      console.error('Supabaseの設定が不足しています');
+      return null;
+    }    
+    // クライアントの初期化
+    // 追加オプションを指定して初期化
+    const client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
+      auth: {
+        persistSession: false, // セッションを持続しない
+        autoRefreshToken: false, // トークンの自動更新を行わない
+      }
+    });
+    return client;
+  } catch (error) {
+    console.error('Supabaseクライアントの初期化中にエラーが発生しました:', error);
     return null;
   }
-  return createClient(config.supabaseUrl, config.supabaseAnonKey);
 }
 
 // メインウィンドウを作成する関数
@@ -81,7 +96,7 @@ function setupIpcHandlers() {
   });
 
   // 画像をアップロード
-  ipcMain.handle(IpcChannels.UPLOAD_IMAGE, async (_, tags: string[]) => {
+  ipcMain.handle(IpcChannels.UPLOAD_IMAGE, async () => {
     try {
       const supabase = initSupabaseClient();
       if (!supabase) {
@@ -102,14 +117,54 @@ function setupIpcHandlers() {
 
       const filePath = filePaths[0];
       const fileName = path.basename(filePath);
+      // ファイルの拡張子を取得
+      const fileExt = path.extname(fileName).toLowerCase();
+      
+      // 完全に安全なファイル名を生成（タイムスタンプとランダム文字列のみを使用）
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 10);
+      const safeFileName = `${timestamp}_${randomString}${fileExt}`;
+      
       const fileContent = fs.readFileSync(filePath);
       const fileStats = fs.statSync(filePath);
 
+      // 設定からバケット名を取得
+      const config = getConfig();
+      const bucketName = config.supabaseBucket;
+      
+      console.dir(config, { depth: null })
+      // ファイルの拡張子からMIMEタイプを取得
+      const ext = fileExt.substring(1);
+      let contentType = 'application/octet-stream'; // デフォルトのMIMEタイプ
+      
+      // 一般的な画像ファイルのMIMEタイプを設定
+      const mimeTypes: Record<string, string> = {
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png': 'image/png',
+        'gif': 'image/gif',
+        'webp': 'image/webp',
+        'svg': 'image/svg+xml',
+        'bmp': 'image/bmp'
+      };
+      
+      if (ext in mimeTypes) {
+        contentType = mimeTypes[ext];
+      }
+      
+      console.log('アップロード情報:', {
+        originalFileName: fileName,
+        safeFileName,
+        contentType,
+        bucketName
+      });
+      
       // Supabaseのストレージにアップロード
       const { data, error } = await supabase.storage
-        .from('images')
-        .upload(`public/${fileName}`, fileContent, {
-          contentType: path.extname(fileName).substring(1)
+        .from(bucketName)
+        .upload(`public/${safeFileName}`, fileContent, {
+          contentType,
+          upsert: true // 同名ファイルが存在する場合は上書き
         });
 
       if (error) {
@@ -118,30 +173,32 @@ function setupIpcHandlers() {
 
       // アップロードした画像の公開URLを取得
       const { data: { publicUrl } } = supabase.storage
-        .from('images')
-        .getPublicUrl(`public/${fileName}`);
+        .from(bucketName)
+        .getPublicUrl(`public/${safeFileName}`);
 
       // メタデータをデータベースに保存（例：テーブルがあると仮定）
-      const { data: imageData, error: dbError } = await supabase
-        .from('images')
-        .insert({
-          name: fileName,
-          url: publicUrl,
-          size: fileStats.size,
-          type: path.extname(fileName).substring(1),
-          tags: tags
-        })
-        .select()
-        .single();
+      // const { data: imageData, error: dbError } = await supabase
+      //   .from('images')
+      //   .insert({
+      //     name: fileName,
+      //     url: publicUrl,
+      //     size: fileStats.size,
+      //     type: path.extname(fileName).substring(1)
+      //   })
+      //   .select()
+      //   .single();
 
-      if (dbError) {
-        throw dbError;
-      }
+      // if (dbError) {
+      //   throw dbError;
+      // }
 
-      return { success: true, data: imageData };
+      return { success: true, publicUrl};
     } catch (error) {
       console.error('画像アップロードエラー:', error);
-      return { success: false, message: error.message };
+      return { 
+        success: false, 
+        message: error instanceof Error ? error.message : '不明なエラーが発生しました' 
+      };
     }
   });
 
@@ -153,44 +210,67 @@ function setupIpcHandlers() {
         throw new Error('Supabaseクライアントの初期化に失敗しました');
       }
 
-      const { data, error } = await supabase
-        .from('images')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // 設定からバケット名を取得
+      const config = getConfig();
+      const bucketName = config.supabaseBucket;
+      
+      // Storageから画像一覧を取得
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .list('public', {
+          sortBy: { column: 'created_at', order: 'desc' }
+        });
 
       if (error) {
         throw error;
       }
 
-      return { success: true, data };
+      // 各ファイルの公開URLを取得して画像情報を作成
+      const imageList = data.map(file => {
+        // ファイル名をそのまま使用（すでに安全な形式になっている）
+        const { data: { publicUrl } } = supabase.storage
+          .from(bucketName)
+          .getPublicUrl(`public/${file.name}`);
+          
+        return {
+          id: file.id,
+          name: file.name,
+          url: publicUrl,
+          createdAt: file.created_at,
+          size: file.metadata?.size || 0,
+          type: path.extname(file.name).substring(1),
+        };
+      });
+
+      return { success: true, data: imageList };
     } catch (error) {
       console.error('画像取得エラー:', error);
-      return { success: false, message: error.message };
+      return { 
+        success: false, 
+        message: error instanceof Error ? error.message : '不明なエラーが発生しました' 
+      };
     }
   });
 
   // 画像を削除
-  ipcMain.handle(IpcChannels.DELETE_IMAGE, async (_, imageId: string, fileName: string) => {
+  ipcMain.handle(IpcChannels.DELETE_IMAGE, async (_, fileName: string) => {
     try {
       const supabase = initSupabaseClient();
       if (!supabase) {
         throw new Error('Supabaseクライアントの初期化に失敗しました');
       }
 
-      // データベースから削除
-      const { error: dbError } = await supabase
-        .from('images')
-        .delete()
-        .eq('id', imageId);
-
-      if (dbError) {
-        throw dbError;
-      }
-
+      // 設定からバケット名を取得
+      const config = getConfig();
+      const bucketName = config.supabaseBucket;
+      
+      // ファイル名をエンコード
+      const encodedFileName = encodeURIComponent(fileName);
+      
       // ストレージから削除
       const { error: storageError } = await supabase.storage
-        .from('images')
-        .remove([`public/${fileName}`]);
+        .from(bucketName)
+        .remove([`public/${encodedFileName}`]);
 
       if (storageError) {
         throw storageError;
@@ -199,33 +279,10 @@ function setupIpcHandlers() {
       return { success: true };
     } catch (error) {
       console.error('画像削除エラー:', error);
-      return { success: false, message: error.message };
-    }
-  });
-
-  // 画像情報を更新
-  ipcMain.handle(IpcChannels.UPDATE_IMAGE, async (_, imageId: string, updates: Partial<ImageInfo>) => {
-    try {
-      const supabase = initSupabaseClient();
-      if (!supabase) {
-        throw new Error('Supabaseクライアントの初期化に失敗しました');
-      }
-
-      const { data, error } = await supabase
-        .from('images')
-        .update(updates)
-        .eq('id', imageId)
-        .select()
-        .single();
-
-      if (error) {
-        throw error;
-      }
-
-      return { success: true, data };
-    } catch (error) {
-      console.error('画像更新エラー:', error);
-      return { success: false, message: error.message };
+      return { 
+        success: false, 
+        message: error instanceof Error ? error.message : '不明なエラーが発生しました' 
+      };
     }
   });
 }

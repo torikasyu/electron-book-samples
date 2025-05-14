@@ -11,6 +11,7 @@ interface SettingsModalProps {
 const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   const [supabaseUrl, setSupabaseUrl] = useState('');
   const [supabaseAnonKey, setSupabaseAnonKey] = useState('');
+  const [supabaseBucket, setSupabaseBucket] = useState('images');
   const [isSaving, setIsSaving] = useState(false);
 
   // コンポーネントがマウントされたときに設定を読み込む
@@ -26,6 +27,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
       const config = await window.electronAPI.config.get();
       setSupabaseUrl(config.supabaseUrl || '');
       setSupabaseAnonKey(config.supabaseAnonKey || '');
+      setSupabaseBucket(config.supabaseBucket || 'images');
     } catch (error) {
       console.error('設定の読み込みに失敗しました:', error);
     }
@@ -37,7 +39,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
       setIsSaving(true);
       await window.electronAPI.config.update({
         supabaseUrl,
-        supabaseAnonKey
+        supabaseAnonKey,
+        supabaseBucket
       });
       onClose();
     } catch (error) {
@@ -80,6 +83,17 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
                 value={supabaseAnonKey}
                 onChange={(e) => setSupabaseAnonKey(e.target.value)}
                 placeholder="your-anon-key"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="supabaseBucket">Supabase Storage Bucket</label>
+              <input
+                type="text"
+                id="supabaseBucket"
+                className="form-control"
+                value={supabaseBucket}
+                onChange={(e) => setSupabaseBucket(e.target.value)}
+                placeholder="images"
               />
             </div>
           </div>

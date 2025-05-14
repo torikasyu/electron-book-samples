@@ -8,7 +8,6 @@ export interface ImageInfo {
   createdAt: string;
   size: number;
   type: string;
-  tags?: string[];
 }
 
 /**
@@ -18,7 +17,6 @@ export enum IpcChannels {
   UPLOAD_IMAGE = 'upload-image',
   GET_IMAGES = 'get-images',
   DELETE_IMAGE = 'delete-image',
-  UPDATE_IMAGE = 'update-image',
   GET_CONFIG = 'get-config',
   UPDATE_CONFIG = 'update-config'
 }
