@@ -11,6 +11,32 @@ export interface ImageInfo {
 }
 
 /**
+ * 画像アップロードの結果を表すインターフェース
+ */
+export interface ImageUploadResult {
+  success: boolean;
+  publicUrl?: string;
+  message?: string;
+}
+
+/**
+ * 画像一覧取得の結果を表すインターフェース
+ */
+export interface ImageListResult {
+  success: boolean;
+  data?: ImageInfo[];
+  message?: string;
+}
+
+/**
+ * 画像削除の結果を表すインターフェース
+ */
+export interface ImageDeleteResult {
+  success: boolean;
+  message?: string;
+}
+
+/**
  * IPC通信で使用するチャンネル名の定義
  */
 export enum IpcChannels {

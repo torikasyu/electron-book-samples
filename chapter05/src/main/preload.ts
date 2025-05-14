@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IpcChannels, ImageInfo } from '../shared/types';
+import { IpcChannels, ImageInfo, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../shared/types';
 import { Config } from './api/config';
 
 /**
@@ -17,11 +17,14 @@ const api = {
   // 画像関連
   images: {
     // 画像をアップロード
-    upload: () => ipcRenderer.invoke(IpcChannels.UPLOAD_IMAGE),
+    upload: (): Promise<ImageUploadResult> => 
+      ipcRenderer.invoke(IpcChannels.UPLOAD_IMAGE),
     // 画像一覧を取得
-    getAll: () => ipcRenderer.invoke(IpcChannels.GET_IMAGES),
+    getAll: (): Promise<ImageListResult> => 
+      ipcRenderer.invoke(IpcChannels.GET_IMAGES),
     // 画像を削除
-    delete: (fileName: string) => ipcRenderer.invoke(IpcChannels.DELETE_IMAGE, fileName),
+    delete: (fileName: string): Promise<ImageDeleteResult> => 
+      ipcRenderer.invoke(IpcChannels.DELETE_IMAGE, fileName),
   }
 };
 

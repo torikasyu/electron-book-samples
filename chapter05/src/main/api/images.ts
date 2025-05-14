@@ -3,13 +3,13 @@ import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { getConfig } from './config';
-import { ImageInfo } from '../../shared/types';
+import { ImageInfo, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../../shared/types';
 
 /**
  * Supabaseクライアントの初期化関数
  * @returns 初期化されたSupabaseクライアント、または初期化に失敗した場合はnull
  */
-export function initSupabaseClient(): SupabaseClient | null {
+function initSupabaseClient(): SupabaseClient | null {
   try {
     const config = getConfig();
     
@@ -38,7 +38,7 @@ export function initSupabaseClient(): SupabaseClient | null {
  * @param filePath アップロードするファイルのパス
  * @returns アップロード結果
  */
-export async function uploadImage(filePath: string): Promise<{ success: boolean; publicUrl?: string; message?: string }> {
+export async function uploadImage(filePath: string): Promise<ImageUploadResult> {
   try {
     const supabase = initSupabaseClient();
     if (!supabase) {
@@ -115,7 +115,7 @@ export async function uploadImage(filePath: string): Promise<{ success: boolean;
  * 画像一覧を取得する関数
  * @returns 画像一覧
  */
-export async function getImages(): Promise<{ success: boolean; data?: ImageInfo[]; message?: string }> {
+export async function getImages(): Promise<ImageListResult> {
   try {
     const supabase = initSupabaseClient();
     if (!supabase) {
@@ -169,7 +169,7 @@ export async function getImages(): Promise<{ success: boolean; data?: ImageInfo[
  * @param fileName 削除する画像のファイル名
  * @returns 削除結果
  */
-export async function deleteImage(fileName: string): Promise<{ success: boolean; message?: string }> {
+export async function deleteImage(fileName: string): Promise<ImageDeleteResult> {
   try {
     const supabase = initSupabaseClient();
     if (!supabase) {
@@ -180,13 +180,10 @@ export async function deleteImage(fileName: string): Promise<{ success: boolean;
     const config = getConfig();
     const bucketName = config.supabaseBucket;
     
-    // ファイル名をそのまま使用
-    const safeFileName = fileName;
-    
     // ストレージから削除
     const { error: storageError } = await supabase.storage
       .from(bucketName)
-      .remove([`public/${safeFileName}`]);
+      .remove([`public/${fileName}`]);
 
     if (storageError) {
       throw storageError;

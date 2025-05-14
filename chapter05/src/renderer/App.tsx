@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ImageCard from './components/ImageCard';
 import SettingsModal from './components/SettingsModal';
-import { ImageInfo } from '../shared/types';
+import { ImageInfo, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../shared/types';
 
 /**
  * アプリケーションのメインコンポーネント
@@ -37,7 +37,7 @@ const App: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const result = await window.electronAPI.images.getAll();
+      const result: ImageListResult = await window.electronAPI.images.getAll();
       if (result.success && result.data) {
         setImages(result.data);
       } else {
@@ -54,7 +54,7 @@ const App: React.FC = () => {
   // 画像をアップロードする関数
   const handleUpload = async () => {
     try {
-      const result = await window.electronAPI.images.upload();
+      const result: ImageUploadResult = await window.electronAPI.images.upload();
       if (result.success) {
         await loadImages();
       } else {
@@ -71,7 +71,7 @@ const App: React.FC = () => {
     if (!confirm('この画像を削除してもよろしいですか？')) return;
 
     try {
-      const result = await window.electronAPI.images.delete(fileName);
+      const result: ImageDeleteResult = await window.electronAPI.images.delete(fileName);
       if (result.success) {
         await loadImages();
       } else {

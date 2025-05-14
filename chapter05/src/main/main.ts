@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import { getConfig, updateConfig } from './api/config';
 import { uploadImage, getImages, deleteImage } from './api/images';
-import { IpcChannels } from '../shared/types';
+import { IpcChannels, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../shared/types';
 
 // グローバル変数としてウィンドウオブジェクトを保持
 // これはJavaScriptのガベージコレクションによってウィンドウが閉じられるのを防ぐため
@@ -72,7 +72,7 @@ function setupIpcHandlers() {
   });
 
   // 画像をアップロード
-  ipcMain.handle(IpcChannels.UPLOAD_IMAGE, async () => {
+  ipcMain.handle(IpcChannels.UPLOAD_IMAGE, async (): Promise<ImageUploadResult> => {
     try {
       // ファイル選択ダイアログを表示
       const { filePaths } = await dialog.showOpenDialog({
@@ -98,7 +98,7 @@ function setupIpcHandlers() {
   });
 
   // 画像一覧を取得
-  ipcMain.handle(IpcChannels.GET_IMAGES, async () => {
+  ipcMain.handle(IpcChannels.GET_IMAGES, async (): Promise<ImageListResult> => {
     try {
       // 画像一覧取得処理を実行
       return await getImages();
@@ -112,7 +112,7 @@ function setupIpcHandlers() {
   });
 
   // 画像を削除
-  ipcMain.handle(IpcChannels.DELETE_IMAGE, async (_, fileName: string) => {
+  ipcMain.handle(IpcChannels.DELETE_IMAGE, async (_, fileName: string): Promise<ImageDeleteResult> => {
     try {
       // 画像削除処理を実行
       return await deleteImage(fileName);
