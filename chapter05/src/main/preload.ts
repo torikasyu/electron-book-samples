@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { IpcChannels, ImageInfo } from '../shared/types';
+import { Config } from './api/config';
 
 /**
  * レンダラープロセスで使用するAPI
@@ -8,9 +9,9 @@ const api = {
   // 設定関連
   config: {
     // 設定を取得
-    get: () => ipcRenderer.invoke(IpcChannels.GET_CONFIG),
+    get: (): Promise<Config> => ipcRenderer.invoke(IpcChannels.GET_CONFIG),
     // 設定を更新
-    update: (newConfig: any) => ipcRenderer.invoke(IpcChannels.UPDATE_CONFIG, newConfig)
+    update: (newConfig: Partial<Config>): Promise<void> => ipcRenderer.invoke(IpcChannels.UPDATE_CONFIG, newConfig)
   },
   
   // 画像関連

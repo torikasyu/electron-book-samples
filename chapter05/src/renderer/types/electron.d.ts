@@ -1,23 +1,12 @@
 import { ImageInfo } from '../../shared/types';
+import { Config } from '../../main/api/config';
 
 declare global {
   interface Window {
     electronAPI: {
       config: {
-        get: () => Promise<{
-          supabaseUrl: string;
-          supabaseAnonKey: string;
-          supabaseBucket: string;
-        }>;
-        update: (newConfig: {
-          supabaseUrl?: string;
-          supabaseAnonKey?: string;
-          supabaseBucket?: string;
-        }) => Promise<{
-          supabaseUrl: string;
-          supabaseAnonKey: string;
-          supabaseBucket: string;
-        }>;
+        get: () => Promise<Config>;
+        update: (newConfig: Partial<Config>) => Promise<Config>;
       };
       images: {
         upload: () => Promise<{

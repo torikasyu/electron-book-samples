@@ -1,16 +1,14 @@
 import { app } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as dotenv from 'dotenv';
 
 /**
  * アプリケーションの設定を管理するインターフェース
  */
-interface Config {
+export interface Config {
   supabaseUrl: string;
   supabaseAnonKey: string;
   supabaseBucket: string;
-  // 他の設定項目があれば追加
 }
 
 /**
@@ -18,7 +16,7 @@ interface Config {
  * 開発環境では.envから、本番環境ではユーザーデータディレクトリのconfig.jsonから読み込む
  */
 export function getConfig(): Config {
-  // 本番環境ではユーザーデータディレクトリのconfig.jsonから読み込む
+  // ユーザーデータディレクトリのconfig.jsonから読み込む
   const userDataPath = app.getPath('userData');
   const configPath = path.join(userDataPath, 'config.json');
 
@@ -27,7 +25,7 @@ export function getConfig(): Config {
     const defaultConfig: Config = {
       supabaseUrl: '',
       supabaseAnonKey: '',
-      supabaseBucket: 'images',
+      supabaseBucket: '',
     };
     fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
     return defaultConfig;
@@ -37,20 +35,13 @@ export function getConfig(): Config {
   try {
     const configData = fs.readFileSync(configPath, 'utf8');
     const config = JSON.parse(configData) as Config;
-    
-    // 旧設定ファイルにバケット名がない場合はデフォルト値を設定
-    if (!config.supabaseBucket) {
-      config.supabaseBucket = 'images';
-      fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-    }
-    
     return config;
   } catch (error) {
     console.error('設定ファイルの読み込みに失敗しました:', error);
     return {
       supabaseUrl: '',
       supabaseAnonKey: '',
-      supabaseBucket: 'images',
+      supabaseBucket: '',
     };
   }
 }
@@ -63,7 +54,7 @@ export function updateConfig(newConfig: Partial<Config>): void {
   const config = getConfig();
   const updatedConfig = { ...config, ...newConfig };
   
-  // 本番環境ではconfig.jsonを更新
+  // config.jsonを更新
   const userDataPath = app.getPath('userData');
   const configPath = path.join(userDataPath, 'config.json');
   
