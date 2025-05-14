@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
-import { getConfig, updateConfig } from '../config';
+import { getConfig, updateConfig } from './config';
 import { IpcChannels, ImageInfo } from '../shared/types';
 
 // グローバル変数としてウィンドウオブジェクトを保持
@@ -175,22 +175,6 @@ function setupIpcHandlers() {
       const { data: { publicUrl } } = supabase.storage
         .from(bucketName)
         .getPublicUrl(`public/${safeFileName}`);
-
-      // メタデータをデータベースに保存（例：テーブルがあると仮定）
-      // const { data: imageData, error: dbError } = await supabase
-      //   .from('images')
-      //   .insert({
-      //     name: fileName,
-      //     url: publicUrl,
-      //     size: fileStats.size,
-      //     type: path.extname(fileName).substring(1)
-      //   })
-      //   .select()
-      //   .single();
-
-      // if (dbError) {
-      //   throw dbError;
-      // }
 
       return { success: true, publicUrl};
     } catch (error) {
