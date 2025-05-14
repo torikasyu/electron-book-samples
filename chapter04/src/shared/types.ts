@@ -14,3 +14,19 @@ export interface SystemInfo {
   };
   uptime: number;
 }
+
+// ファイル情報の型
+export interface FileInfo {
+  path: string;
+  size: number;
+  created: number;
+  modified: number;
+  accessed: number;
+  isDirectory: boolean;
+  isFile: boolean;
+  permissions: {
+    readable: boolean;
+    writable: boolean;
+    executable: boolean;
+  };
+}

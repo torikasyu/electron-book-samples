@@ -2,7 +2,8 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as os from 'os';
-import { SystemInfo } from '../shared/types';
+import * as fs from 'fs';
+import { SystemInfo, FileInfo } from '../shared/types';
 
 // アプリケーションのメインウィンドウを保持する変数
 let mainWindow: BrowserWindow | null = null;
@@ -68,23 +69,77 @@ app.on('activate', () => {
 
 // IPCイベントの処理
 
-// ファイル選択ダイアログを開く
-ipcMain.handle('dialog:openFile', async () => {
+// ファイル選択ダイアログを開き、ファイル情報を取得
+ipcMain.handle('dialog:openFile', async (): Promise<FileInfo | undefined> => {
   if (!mainWindow) return undefined;
   
   const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile'],
     filters: [
-      { name: 'テキストファイル', extensions: ['txt', 'md'] },
       { name: 'すべてのファイル', extensions: ['*'] }
     ]
   });
   
-  if (canceled) {
+  if (canceled || filePaths.length === 0) {
     return undefined;
   }
   
-  return filePaths[0];
+  const filePath = filePaths[0];
+  
+  try {
+    // ファイルの詳細情報を取得
+    const stats = fs.statSync(filePath);
+    
+    // ファイルのパーミッションを確認
+    let readable = false;
+    let writable = false;
+    let executable = false;
+    
+    try {
+      // 読み取り権限の確認
+      fs.accessSync(filePath, fs.constants.R_OK);
+      readable = true;
+    } catch (e) {
+      readable = false;
+    }
+    
+    try {
+      // 書き込み権限の確認
+      fs.accessSync(filePath, fs.constants.W_OK);
+      writable = true;
+    } catch (e) {
+      writable = false;
+    }
+    
+    try {
+      // 実行権限の確認
+      fs.accessSync(filePath, fs.constants.X_OK);
+      executable = true;
+    } catch (e) {
+      executable = false;
+    }
+    
+    // ファイル情報オブジェクトを作成して返す
+    const fileInfo: FileInfo = {
+      path: filePath,
+      size: stats.size,
+      created: stats.birthtimeMs,
+      modified: stats.mtimeMs,
+      accessed: stats.atimeMs,
+      isDirectory: stats.isDirectory(),
+      isFile: stats.isFile(),
+      permissions: {
+        readable,
+        writable,
+        executable
+      }
+    };
+    
+    return fileInfo;
+  } catch (error) {
+    console.error('ファイル情報の取得エラー:', error);
+    return undefined;
+  }
 });
 
 // システム情報を取得
