@@ -1,30 +1,22 @@
 import React, { useState } from 'react';
+import { getFormattedFileSize } from './utils/imageUtils';
 
 const App: React.FC = () => {
-  const [count, setCount] = useState<number>(0);
+  const [formattedSize, setFormattedSize] = useState<string>('');
 
-  const increment = () => setCount(count + 1);
-  const decrement = () => setCount(count - 1);
+  const handleFormatFileSize = (bytes: number) => {
+    const result = getFormattedFileSize(bytes);
+    setFormattedSize(result);
+  };
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1>Electron + React + TypeScript App</h1>
       
       <div style={{ marginTop: '20px' }}>
-        <h2>カウンター</h2>
-        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>Count: {count}</p>
-        <button 
-          onClick={increment} 
-          style={{ marginRight: '10px', padding: '8px 16px' }}
-        >
-          +1
-        </button>
-        <button 
-          onClick={decrement}
-          style={{ padding: '8px 16px' }}
-        >
-          -1
-        </button>
+        <h2>ファイルサイズ（bytes）</h2>
+        <input type="number" onChange={(e) => handleFormatFileSize(Number(e.target.value))} />
+        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>ファイルサイズ（bytes）: {formattedSize}</p>
       </div>
     </div>
   );
