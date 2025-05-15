@@ -13,17 +13,17 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
-  // コンポーネントがマウントされたときに画像を読み込む
+  // コンポーネントがマウントされたときに設定のチェックと画像読み込みを行う
   useEffect(() => {
-    loadImages();
     checkConfiguration();
+    loadImages();
   }, []);
 
   // 設定が正しく行われているか確認する関数
   const checkConfiguration = async () => {
     try {
       const config = await window.electronAPI.config.get();
-      if (!config.supabaseUrl || !config.supabaseAnonKey) {
+      if (!config.supabaseUrl || !config.supabaseAnonKey || !config.supabaseBucket) {
         setIsSettingsModalOpen(true);
       }
     } catch (error) {
@@ -82,10 +82,6 @@ const App: React.FC = () => {
       setError('画像の削除に失敗しました');
     }
   };
-
-
-
-
 
   return (
     <div className="container">

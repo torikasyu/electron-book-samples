@@ -11,10 +11,6 @@ export interface Config {
   supabaseBucket: string;
 }
 
-/**
- * 環境に応じた設定を取得する関数
- * 開発環境では.envから、本番環境ではユーザーデータディレクトリのconfig.jsonから読み込む
- */
 export function getConfig(): Config {
   // ユーザーデータディレクトリのconfig.jsonから読み込む
   const userDataPath = app.getPath('userData');
