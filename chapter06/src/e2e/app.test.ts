@@ -14,7 +14,6 @@ const runTest = async (testFn: (window: Page) => Promise<void>) => {
   try {
     // アプリのパスを確認
     const appPath = path.join(__dirname, '../../dist/main.js');
-    console.log(`アプリのパス: ${appPath}`);
     
     // Electronアプリを起動
     electronApp = await electron.launch({
