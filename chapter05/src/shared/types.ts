@@ -15,7 +15,6 @@ export interface ImageInfo {
  */
 export interface ImageUploadResult {
   success: boolean;
-  publicUrl?: string;
   message?: string;
 }
 

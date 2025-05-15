@@ -95,13 +95,8 @@ export async function uploadImage(filePath: string): Promise<ImageUploadResult> 
     if (error) {
       throw error;
     }
-
-    // アップロードした画像の公開パスを取得
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucketName)
-      .getPublicUrl(`public/${safeFileName}`);
-
-    return { success: true, publicUrl };
+    
+    return { success: true };
   } catch (error) {
     console.error('画像アップロードエラー:', error);
     return { 
