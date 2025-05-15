@@ -7,7 +7,12 @@ const App: React.FC = () => {
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <h1>ファイルサイズ表示アプリ</h1>
-      <input type="number" onChange={(e) => setFileSize(Number(e.target.value))} />
+      <input 
+        type="number" 
+        onChange={(e) => setFileSize(Number(e.target.value))} 
+        aria-label="ファイルサイズ入力"
+        data-testid="file-size-input"
+      />
       <FileSizeViewer bytes={fileSize} />
     </div>
   );
