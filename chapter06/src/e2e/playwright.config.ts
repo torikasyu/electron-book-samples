@@ -12,7 +12,7 @@ const config: PlaywrightTestConfig = {
   workers: 1,
   
   // テストファイルのパターン
-  testMatch: ['**/*.test.ts'],
+  testMatch: ['**/*.e2e-test.ts'],
   
   // テスト実行時の詳細レベル
   reporter: 'list',
