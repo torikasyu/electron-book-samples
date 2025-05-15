@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
-import { getFormattedFileSize } from './utils/imageUtils';
+import { FileSizeViewer } from './components/fileSizeViewer';
 
 const App: React.FC = () => {
-  const [formattedSize, setFormattedSize] = useState<string>('');
-
-  const handleFormatFileSize = (bytes: number) => {
-    const result = getFormattedFileSize(bytes);
-    setFormattedSize(result);
-  };
+  const [fileSize, setFileSize] = useState<number>(0);
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Electron + React + TypeScript App</h1>
-      
-      <div style={{ marginTop: '20px' }}>
-        <h2>ファイルサイズ（bytes）</h2>
-        <input type="number" onChange={(e) => handleFormatFileSize(Number(e.target.value))} />
-        <p style={{ fontSize: '24px', fontWeight: 'bold' }}>ファイルサイズ（bytes）: {formattedSize}</p>
-      </div>
+      <h1>ファイルサイズ表示アプリ</h1>
+      <input type="number" onChange={(e) => setFileSize(Number(e.target.value))} />
+      <FileSizeViewer bytes={fileSize} />
     </div>
   );
 };
