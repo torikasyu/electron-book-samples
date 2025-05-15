@@ -5,5 +5,6 @@ module.exports = {
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$',
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
-  }
+  },
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts']
 };
