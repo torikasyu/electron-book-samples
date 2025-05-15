@@ -45,7 +45,7 @@ test('アプリが正しく起動すること', async () => {
 
     // 見出しが表示されているか確認
     const heading = await window.locator('h1').textContent();
-    expect(heading).toBe('ファイルサイズ表示アプリ');
+    expect(heading).toBe('バイト数を入力してください');
   });
 });
 

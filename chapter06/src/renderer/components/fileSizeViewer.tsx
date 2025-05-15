@@ -1,9 +1,13 @@
-import { getFormattedFileSize } from '../utils/getFormattedFileSize';
+type Props = {
+    fileSize: number;
+    readableFileSize: string;
+};
 
-export const FileSizeViewer = ({ bytes }: { bytes: number }) => {
+export const FileSizeViewer: React.FC<Props> = ({ fileSize, readableFileSize }: Props) => {
     return (
         <div>
-            <p style={{ fontSize: '24px', fontWeight: 'bold' }}>読みやすい表示: {getFormattedFileSize(bytes)}</p>
+            <p>バイト数: {fileSize}</p>
+            <p>読みやすい表示: {readableFileSize}</p>
         </div>
     );
 };
