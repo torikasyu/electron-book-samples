@@ -10,7 +10,8 @@
     "start": "electron .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "npm run build && playwright test -c src/e2e/playwright.config.ts"
+    "test:e2e": "npm run build && playwright test -c src/e2e/playwright.config.ts",
+    "test:e2e:debug": "npm run build && playwright test -c src/e2e/playwright.config.ts --debug"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.0",
