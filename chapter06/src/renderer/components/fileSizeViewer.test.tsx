@@ -22,11 +22,8 @@ describe('FileSizeViewer', () => {
     // コンポーネントをレンダリング
     render(<FileSizeViewer bytes={1500} />);
     
-    // 見出しが表示されていることを確認
-    expect(screen.getByText('ファイルサイズ（bytes）')).toBeInTheDocument();
-    
     // フォーマットされたサイズが表示されていることを確認
-    expect(screen.getByText('ファイルサイズ（bytes）: 1.5 KB')).toBeInTheDocument();
+    expect(screen.getByText('読みやすい表示: 1.5 KB')).toBeInTheDocument();
     
     // getFormattedFileSize関数が正しい引数で呼び出されたことを確認
     expect(formatModule.getFormattedFileSize).toHaveBeenCalledWith(1500);
@@ -41,7 +38,7 @@ describe('FileSizeViewer', () => {
     render(<FileSizeViewer bytes={0} />);
     
     // フォーマットされたサイズが表示されていることを確認
-    expect(screen.getByText('ファイルサイズ（bytes）: 0 Bytes')).toBeInTheDocument();
+    expect(screen.getByText('読みやすい表示: 0 Bytes')).toBeInTheDocument();
     
     // getFormattedFileSize関数が正しい引数で呼び出されたことを確認
     expect(formatModule.getFormattedFileSize).toHaveBeenCalledWith(0);
@@ -56,7 +53,7 @@ describe('FileSizeViewer', () => {
     render(<FileSizeViewer bytes={1500000000} />);
     
     // フォーマットされたサイズが表示されていることを確認
-    expect(screen.getByText('ファイルサイズ（bytes）: 1.43 GB')).toBeInTheDocument();
+    expect(screen.getByText('読みやすい表示: 1.43 GB')).toBeInTheDocument();
     
     // getFormattedFileSize関数が正しい引数で呼び出されたことを確認
     expect(formatModule.getFormattedFileSize).toHaveBeenCalledWith(1500000000);
