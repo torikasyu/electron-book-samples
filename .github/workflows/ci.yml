@@ -9,6 +9,13 @@ on:
     branches: [ main, master ]
     paths:
       - 'chapter08/**'
+  # 手動実行を可能にする
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: '実行理由（任意）'
+        required: false
+        default: '手動実行'
 
 jobs:
   test:
