@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Minimal Electron + React + TypeScript + webpack sample",
   "main": "dist/main.js",
+  "author": {
+    "name": "Electron Book Sample",
+    "email": "example@example.com"
+  },
+  "homepage": "https://github.com/example/electron-react-sample",
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development && electron .",
@@ -31,6 +36,7 @@
       "target": ["nsis", "portable"]
     },
     "linux": {
+      "maintainer": "Electron Book Sample <example@example.com>",
       "target": ["AppImage", "deb"],
       "category": "Development"
     }
