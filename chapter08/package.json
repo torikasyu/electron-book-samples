@@ -11,8 +11,13 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:e2e": "npm run build && playwright test -c src/e2e/playwright.config.ts",
-    "test:e2e:debug": "npm run build && playwright test -c src/e2e/playwright.config.ts --debug"
+    "test:e2e:debug": "npm run build && playwright test -c src/e2e/playwright.config.ts --debug",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux"
   },
+  "author": "Your Name <your.email@example.com>",
   "devDependencies": {
     "@playwright/test": "^1.40.0",
     "@testing-library/jest-dom": "^5.16.5",
