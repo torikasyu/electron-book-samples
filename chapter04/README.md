@@ -1,42 +1,34 @@
-# Electron IPC通信サンプルアプリケーション
+# Electron + React + TypeScript IPCサンプル
 
-このプロジェクトは、Electron、React、TypeScriptを使用して、IPC（プロセス間通信）の基本的な使い方を示すサンプルアプリケーションです。
+このプロジェクトは、Electron、React、TypeScriptを使用したIPC（プロセス間通信）の基本的な使い方を学ぶためのサンプルアプリケーションです。
+
+## 動作環境
+
+- Node.js 18.0.0 以上
+- npm 9.0.0 以上
 
 ## 機能
 
 このアプリケーションには以下の機能が含まれています：
 
-1. **ファイル選択ダイアログ** - メインプロセスのElectron APIを使用してファイル選択ダイアログを表示し、選択されたファイルパスをレンダラープロセスに返します。
+1. **ファイル選択ダイアログ** - メインプロセスのElectron APIを使用してネイティブのファイル選択ダイアログを表示し、選択されたファイルパスをレンダラープロセスに返します。
 2. **システム情報表示** - メインプロセスからシステム情報（OS、CPU、メモリ、稼働時間など）を取得して表示します。
 
-## 技術スタック
-
-- **Electron**: デスクトップアプリケーションフレームワーク
-- **React**: UIライブラリ
-- **TypeScript**: 型安全な開発言語
-- **Webpack**: モジュールバンドラー
-
-## プロジェクト構造
+## プロジェクト構成
 
 ```
 chapter04/
-├── config/                   # 設定ファイル
-│   ├── webpack.main.js       # メインプロセス用Webpack設定
-│   └── webpack.renderer.js   # レンダラープロセス用Webpack設定
+├── dist/                      # ビルド出力先
+│   ├── main.js               # コンパイルされたメインプロセス
+│   └── renderer/             # バンドルされたレンダラーファイル
 ├── src/                      # ソースコード
-│   ├── main/                 # メインプロセス関連のコード
-│   │   ├── main.ts           # メインプロセスのエントリーポイント
-│   │   └── preload.ts        # プリロードスクリプト（コンテキスト分離用）
-│   ├── renderer/             # レンダラープロセス関連のコード
-│   │   ├── components/       # UIコンポーネント
-│   │   ├── types/            # 型定義
-│   │   │   └── electron.d.ts # Electron APIの型定義
-│   │   ├── App.tsx           # メインのReactコンポーネント
-│   │   ├── index.html        # HTMLテンプレート
-│   │   ├── index.tsx         # レンダラープロセスのエントリーポイント
-│   │   └── styles.css        # スタイルシート
-│   └── shared/               # 共有コード
-│       └── types.ts          # 共有型定義
+│   ├── main/                 # メインプロセス
+│   │   └── main.ts           # メインプロセスのエントリーポイント
+│   └── renderer/             # レンダラープロセス
+│       ├── components/       # UIコンポーネント
+│       ├── App.tsx           # メインのReactコンポーネント
+│       ├── index.html        # HTMLテンプレート
+│       └── index.tsx         # レンダラープロセスのエントリーポイント
 ├── package.json              # プロジェクト設定
 ├── tsconfig.json             # TypeScript設定
 └── webpack.config.js         # Webpack設定
@@ -55,35 +47,63 @@ Electronでは、メインプロセスとレンダラープロセス間の通信
 - **invoke/handle**: レンダラーからメインプロセスへの要求と応答（Promise形式）
 - **contextBridge**: preloadスクリプトを使用してAPIを安全に公開
 
-## 実行方法
+## セットアップ
 
-1. 依存関係をインストール：
+1. 依存関係をインストール:
 ```bash
 npm install
 ```
 
-2. アプリケーションをビルド：
-```bash
-npm run build
-```
+## 開発手順
 
-3. アプリケーションを実行：
-```bash
-npm start
-```
+### 開発モード
 
-開発モードで実行（ファイル変更時に自動再ビルド）：
+開発用にビルドしてElectronを起動します（ファイル変更時に自動再ビルド）:
+
 ```bash
 npm run dev
 ```
 
-## 学習ポイント
+### ビルド
+```bash
+npm run build
+```
 
-- Electronのメインプロセスとレンダラープロセスの役割分担
-- preloadスクリプトを使用したセキュアなIPC通信
-- TypeScriptによる型安全なElectron開発
-- ReactとElectronの統合方法
+### 実行
 
-## ライセンス
+ビルド済みのアプリケーションを実行します:
 
-MIT
+```bash
+npm start
+```
+
+## 主な機能
+
+1. **IPC通信**
+   - メインプロセスとレンダラープロセス間の双方向通信
+   - ファイルシステム操作などのNode.js APIの安全な利用
+
+2. **コンポーネントベースのUI**
+   - Reactのコンポーネントを使用した宣言的なUI構築
+   - 状態管理とライフサイクルの理解
+
+3. **開発者体験**
+   - TypeScriptによる型安全な開発
+   - ESLintとPrettierによるコード品質の維持
+
+## トラブルシューティング
+
+### 依存関係の再インストール
+問題が発生した場合は、依存関係を再インストールしてください。
+
+```bash
+rm -rf node_modules
+rm -f package-lock.json
+npm install
+```
+
+### デバッグ
+デベロッパーツールを開くには、アプリケーションを起動した後、以下のいずれかを実行します：
+
+- メニューバーから「View」>「Toggle Developer Tools」を選択
+- ショートカットキー（Mac: `Cmd+Option+I`, Windows/Linux: `Ctrl+Shift+I`）

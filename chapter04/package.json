@@ -1,12 +1,12 @@
 {
-  "name": "electron-todo-app",
+  "name": "electron-ipc-sample",
   "version": "1.0.0",
-  "description": "Electron + React + TypeScript IPCアプリケーション",
+  "description": "Electron + React + TypeScript IPCサンプル",
   "main": "dist/main.js",
   "scripts": {
     "start": "electron .",
     "build": "webpack --config webpack.config.js",
-    "dev": "concurrently \"webpack --config webpack.config.js --watch\" \"electron .\""
+    "dev": "webpack --config webpack.config.js --mode=development && electron ."
   },
   "keywords": [
     "electron",
@@ -21,7 +21,6 @@
     "@types/react-dom": "^18.2.0",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
-    "concurrently": "^8.0.1",
     "css-loader": "^6.7.3",
     "electron": "^24.1.2",
     "eslint": "^8.39.0",
