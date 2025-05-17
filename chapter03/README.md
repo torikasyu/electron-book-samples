@@ -1,67 +1,116 @@
-# Electron + React + TypeScript + webpack 最小サンプル
+# Electron + React + TypeScript + webpack 開発環境
 
-React、Electron、TypeScript、webpackを組み合わせた最小構成のサンプルアプリケーションです。
+この章では、Electronアプリケーション開発のための基本的な開発環境を構築します。
+
+- React 18 + TypeScript + webpack 5 を使用したモダンな開発環境
+- ホットリロード対応の開発サーバー
+- メインプロセスとレンダラープロセスの分離
+- セキュアなデフォルト設定
+
+## 動作環境
+
+- Node.js 18.0.0 以上
+- npm 9.0.0 以上
+- Windows/macOS/Linux で動作確認済み
 
 ## セットアップ
 
-```bash
-cd electron-react-sample
-npm install
-```
+1. リポジトリをクローン（まだの場合）
+   ```bash
+   git clone https://github.com/your-username/electron-book-samples.git
+   cd electron-book-samples
+   ```
 
-## 開発
+2. 依存関係のインストール
+   ```bash
+   cd chapter03
+   npm install
+   ```
 
-### ビルド
-```bash
-npm run build
-```
+### 推奨開発環境
 
-### 開発モード（ビルド後にElectronを起動）
+- [Visual Studio Code](https://code.visualstudio.com/)
+  - 拡張機能:
+    - ESLint
+    - Prettier
+    - TypeScript Vue Plugin (Volar)
+
+## 開発手順
+
+### 開発モード
+
+開発用にビルドしてElectronを起動します。
+
 ```bash
+# 開発モードで起動
 npm run dev
 ```
 
-### ファイル監視モード（開発時推奨）
-```bash
-# ターミナル1: webpackでファイル監視
-npm run watch
+### ビルド
 
-# ターミナル2: Electronアプリ起動
+```bash
+# ビルドの実行
+npm run build
+```
+
+```bash
+# ビルド済みアプリを実行
 npm start
 ```
 
 ## プロジェクト構成
 
 ```
-electron-react-sample/
-├── package.json          # パッケージ設定
+chapter03/
+├── package.json          # パッケージ設定とスクリプト
 ├── tsconfig.json         # TypeScript設定
-├── webpack.config.js     # webpack設定（メイン・レンダラー）
+├── webpack.config.js     # webpack設定
 ├── src/
-│   ├── main/
-│   │   └── main.ts       # Electronメインプロセス
-│   ├── renderer/
-│   │   ├── index.html    # HTMLテンプレート
-│   │   ├── index.tsx     # Reactエントリポイント
-│   │   └── App.tsx       # メインコンポーネント
-│   └── types/
-│       └── global.d.ts   # グローバル型定義
+│   ├── main/             # メインプロセス（Node.js）
+│   │   └── main.ts       # エントリーポイント
+│   └── renderer/         # レンダラープロセス（ブラウザ）
+│       ├── index.html    # HTMLテンプレート
+│       ├── index.tsx     # Reactエントリポイント
+│       └── App.tsx       # メインコンポーネント
 └── dist/                 # ビルド出力先
-    ├── main.js
-    └── renderer/
+    ├── main.js           # コンパイルされたメインプロセス
+    └── renderer/         # バンドルされたレンダラーファイル
 ```
-
-## 主な特徴
-
-- **最小構成**: 必要最小限のファイルで構成
-- **TypeScript**: 型安全なコード記述
-- **webpack**: メインプロセスとレンダラープロセスを個別にバンドル
-- **React**: モダンなReact 18を使用
-- **セキュア**: `nodeIntegration: false`, `contextIsolation: true`で設定
 
 ## カスタマイズポイント
 
-- `src/main/main.ts`: Electronメインプロセスの処理
-- `src/renderer/App.tsx`: Reactアプリケーションのメインコンポーネント
-- `webpack.config.js`: バンドル設定（CSS、画像等の追加も可能）
-- `tsconfig.json`: TypeScriptコンパイル設定
+1. **メインプロセスの編集**
+   - `src/main/main.ts`: Electronのメインプロセスを記述
+   - 新しいウィンドウの作成や、アプリケーションのライフサイクルを管理
+
+2. **レンダラープロセスの編集**
+   - `src/renderer/App.tsx`: メインのReactコンポーネント
+   - `src/renderer/index.html`: アプリケーションのHTMLテンプレート
+
+3. **設定のカスタマイズ**
+   - `webpack.config.js`: ビルド設定のカスタマイズ
+   - `tsconfig.json`: TypeScriptのコンパイルオプションの調整
+
+## トラブルシューティング
+
+### 依存関係の再インストール
+問題が発生した場合は、依存関係を再インストールしてください。
+
+```bash
+rm -rf node_modules
+rm -f package-lock.json
+npm install
+```
+
+### キャッシュのクリア
+ビルドに問題がある場合は、キャッシュをクリアしてみてください。
+
+```bash
+npm run clean
+```
+
+### デバッグ
+デベロッパーツールを開くには、アプリケーションを起動した後、以下のいずれかを実行します：
+
+- メニューバーから「View」>「Toggle Developer Tools」を選択
+- ショートカットキー（Mac: `Cmd+Option+I`, Windows/Linux: `Ctrl+Shift+I`）
