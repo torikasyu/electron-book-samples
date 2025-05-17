@@ -6,7 +6,6 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development && electron .",
-    "watch": "webpack --mode=development --watch",
     "start": "electron .",
     "test": "jest",
     "test:watch": "jest --watch",

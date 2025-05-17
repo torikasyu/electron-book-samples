@@ -1,97 +1,102 @@
-# Electron + React + TypeScript + webpack サンプルアプリ
+# Electronアプリのテストサンプル
 
-React、Electron、TypeScript、webpackを組み合わせたファイルサイズ表示アプリケーションです。
+Electron、React、TypeScriptを使用したデスクトップアプリケーションに対して、ユニットテストとE2Eテストを実装するサンプルです。
+
+## テスト戦略
+
+### ユニットテスト
+- ユーティリティ関数のテスト
+- コンポーネントのレンダリングテスト
+
+### E2Eテスト
+- Playwrightを使用したエンドツーエンドテスト
+- 実際のアプリケーションの動作検証
+
+## 技術スタック
+
+- **フロントエンド**: React 18, TypeScript
+- **バックエンド**: Electron 28
+- **テスト**: Jest, React Testing Library, Playwright
+- **ビルドツール**: Webpack 5
+
+## 環境要件
+
+- Node.js 18.0.0 以上
+- npm 9.0.0 以上
 
 ## セットアップ
 
+### 1. プロジェクトの移動
+
 ```bash
 cd chapter06
+```
+
+### 2. 依存関係のインストール
+
+```bash
 npm install
 ```
 
-## 開発
+## 開発手順
 
-### ビルド
-```bash
-npm run build
-```
+### 開発モードで起動
 
-### 開発モード（ビルド後にElectronを起動）
 ```bash
 npm run dev
 ```
 
-### ファイル監視モード（開発時推奨）
+### ビルド
+
 ```bash
-# ターミナル1: webpackでファイル監視
-npm run watch
-
-# ターミナル2: Electronアプリ起動
-npm start
-```
-
-### テスト実行
-
-#### ユニットテスト（Jest）
-```bash
-npm test
-```
-
-#### E2Eテスト（Playwright）
-```bash
-# ビルド後にE2Eテストを実行
 npm run build
-npm run e2e
+```
+
+## テスト
+
+### ユニットテスト
+
+```bash
+# ユニットテストを実行
+npm test
+
+# ウォッチモードでユニットテストを実行
+npm run test:watch
+```
+
+### E2Eテスト
+
+```bash
+# ビルドしてE2Eテストを実行
+npm run test:e2e
+
+# ビルドしてデバッグモードでE2Eテストを実行
+npm run test:e2e:debug
 ```
 
 ## プロジェクト構成
 
 ```
 chapter06/
-├── package.json          # パッケージ設定
-├── tsconfig.json         # TypeScript設定
-├── tsconfig.test.json    # テスト用TypeScript設定
-├── jest.config.js        # Jestの設定
-├── webpack.config.js     # webpack設定（メイン・レンダラー）
 ├── src/
-│   ├── main/
-│   │   └── main.ts       # Electronメインプロセス
-│   ├── renderer/
-│   │   ├── App.tsx       # メインコンポーネント
-│   │   ├── index.html    # HTMLテンプレート
-│   │   ├── index.tsx     # Reactエントリポイント
-│   │   ├── components/
-│   │   │   ├── fileSizeViewer.tsx       # ファイルサイズ表示コンポーネント
-│   │   │   └── fileSizeViewer.test.tsx  # コンポーネントのテスト
-│   │   └── utils/
-│   │       ├── getFormattedFileSize.ts      # ファイルサイズ変換ユーティリティ
-│   │       └── getFormattedFileSize.test.ts # ユーティリティのテスト
-│   ├── e2e/
-│   │   ├── app.e2e-test.ts     # E2Eテスト
-│   │   └── playwright.config.ts # Playwright設定
-│   ├── setupTests.ts     # テスト設定
-│   └── types/
-│       └── global.d.ts   # グローバル型定義
-└── dist/                 # ビルド出力先
-    ├── main.js
-    └── renderer/
+│   ├── e2e/                  # E2Eテスト
+│   │   ├── app.e2e-test.ts   # E2Eテストケース
+│   │   └── playwright.config.ts  # Playwright設定
+│   ├── main/                 # メインプロセス
+│   │   └── main.ts           # メインプロセスのエントリーポイント
+│   ├── renderer/             # レンダラープロセス
+│   │   ├── components/       # Reactコンポーネント
+│   │   │   └── FileSizeViewer.tsx  # ファイルサイズ表示コンポーネント
+│   │   ├── utils/            # ユーティリティ関数
+│   │   │   └── getFormattedFileSize.ts  # ファイルサイズフォーマット関数
+│   │   ├── App.tsx           # メインのReactコンポーネント
+│   │   ├── index.html        # メインのHTMLテンプレート
+│   │   └── index.tsx         # レンダラーのエントリーポイント
+│   └── setupTests.ts         # テストセットアップ
+├── test-results/            # テスト結果の出力先
+├── jest.config.js           # Jestの設定
+├── package.json             # プロジェクト設定
+├── tsconfig.json            # TypeScript設定
+├── tsconfig.test.json       # テスト用TypeScript設定
+└── webpack.config.js        # Webpack設定
 ```
-
-## 主な特徴
-
-- **TypeScript**: 型安全なコード記述
-- **React**: モダンなReact 18を使用
-- **テスト**: Jest（ユニットテスト）とPlaywright（E2Eテスト）を導入
-- **webpack**: メインプロセスとレンダラープロセスを個別にバンドル
-- **セキュア**: `nodeIntegration: false`, `contextIsolation: true`で設定
-
-## カスタマイズポイント
-
-- `src/main/main.ts`: Electronメインプロセスの処理
-- `src/renderer/App.tsx`: Reactアプリケーションのメインコンポーネント
-- `src/renderer/components/`: UIコンポーネント
-- `src/renderer/utils/`: ユーティリティ関数
-- `src/e2e/`: E2Eテスト
-- `webpack.config.js`: バンドル設定（CSS、画像等の追加も可能）
-- `jest.config.js`: Jestテスト設定
-- `tsconfig.json`: TypeScriptコンパイル設定
