@@ -79,6 +79,24 @@
 2. 機能ブランチを作成して変更を加えてください
 3. プルリクエストを作成してください
 
+## トラブルシューティング
+
+### 依存関係の問題
+
+問題が発生した場合は、依存関係を再インストールしてください：
+
+```bash
+rm -rf node_modules
+rm package-lock.json
+npm install
+```
+
+### デバッグ
+
+デベロッパーツールを開くには：
+- アプリケーション起動後、`Cmd+Option+I` (Mac) または `Ctrl+Shift+I` (Windows/Linux) を押す
+- または、メニューバーから「View」>「Toggle Developer Tools」を選択
+
 ## ライセンス
 
 このプロジェクトはMITライセンスの下で公開されています。
