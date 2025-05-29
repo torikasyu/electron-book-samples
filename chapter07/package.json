@@ -1,0 +1,67 @@
+{
+  "name": "electron-react-sample",
+  "version": "1.0.0",
+  "description": "Minimal Electron + React + TypeScript + webpack sample",
+  "main": "dist/main.js",
+  "author": {
+    "name": "Electron Book Sample",
+    "email": "example@example.com"
+  },
+  "homepage": "https://github.com/example/electron-react-sample",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack --mode=development && electron .",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:linux": "npm run build && electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.example.electron-react-sample",
+    "productName": "Electron React Sample",
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "assets/**/*"
+    ],
+    "icon": "assets/icon",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "linux": {
+      "maintainer": "Electron Book Sample <example@example.com>",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development"
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^26.0.12",
+    "electron-icon-maker": "^0.0.5",
+    "html-webpack-plugin": "^5.5.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.3.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
