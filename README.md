@@ -2,7 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-このリポジトリには、Electron入門書で紹介されているサンプルアプリケーションのソースコードが含まれています。各章ごとに異なるアプリケーションや技術トピックを扱い、段階的にElectron、React、TypeScriptの知識を深めていきます。
+このリポジトリには、[Electron + React + TypeScriptで作るデスクトップアプリ](https://www.amazon.co.jp/dp/B0FBK1NZP4)のサンプルコードが含まれています。
+
+各章ごとに異なるアプリケーションや技術トピックを扱い、段階的にElectron、React、TypeScriptの知識を深めていきます。
 
 > **Note**  
 > このリポジトリのコードはmacOSで作成・動作確認を行っています。他のOSでの動作は確認しておりませんのでご了承ください。
