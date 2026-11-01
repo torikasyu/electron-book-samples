@@ -17,23 +17,23 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
-    "css-loader": "^6.7.3",
-    "electron": "^24.1.2",
-    "eslint": "^8.39.0",
-    "eslint-plugin-react": "^7.32.2",
-    "html-webpack-plugin": "^5.5.1",
-    "style-loader": "^3.3.2",
-    "ts-loader": "^9.4.2",
-    "typescript": "^5.0.4",
-    "webpack": "^5.81.0",
-    "webpack-cli": "^5.0.2"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "css-loader": "^7.1.5",
+    "electron": "^45.2.1",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^17.13.0",
+    "html-webpack-plugin": "^5.6.8",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.6.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.1",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
   }
 }

@@ -1,6 +1,6 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
-const config: PlaywrightTestConfig = {
+export default defineConfig({
   // テストのタイムアウト設定
   timeout: 30000,
   // テスト実行の並列数
@@ -18,6 +18,4 @@ const config: PlaywrightTestConfig = {
     // トレースを記録
     trace: 'on-first-retry',
   },
-};
-
-export default config;
+});

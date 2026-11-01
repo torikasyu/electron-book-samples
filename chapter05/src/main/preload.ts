@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IpcChannels, ImageInfo, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../shared/types';
+import { IpcChannels, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../shared/types';
 import { Config } from './api/config';
 
 /**

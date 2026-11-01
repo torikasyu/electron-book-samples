@@ -21,8 +21,8 @@ Electron、React、TypeScriptを使用したデスクトップアプリケーシ
 
 ## 環境要件
 
-- Node.js 18.0.0 以上
-- npm 9.0.0 以上
+- Node.js 24.0.0 以上
+- npm 11.0.0 以上（パッケージマネージャは npm を使用してください。pnpm / Yarn では package-lock.json が使われず、動作しない場合があります）
 
 ## セットアップ
 
