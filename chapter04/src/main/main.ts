@@ -99,7 +99,7 @@ ipcMain.handle('dialog:openFile', async (): Promise<FileInfo | undefined> => {
       // 読み取り権限の確認
       fs.accessSync(filePath, fs.constants.R_OK);
       readable = true;
-    } catch (e) {
+    } catch {
       readable = false;
     }
     
@@ -107,7 +107,7 @@ ipcMain.handle('dialog:openFile', async (): Promise<FileInfo | undefined> => {
       // 書き込み権限の確認
       fs.accessSync(filePath, fs.constants.W_OK);
       writable = true;
-    } catch (e) {
+    } catch {
       writable = false;
     }
     
@@ -115,7 +115,7 @@ ipcMain.handle('dialog:openFile', async (): Promise<FileInfo | undefined> => {
       // 実行権限の確認
       fs.accessSync(filePath, fs.constants.X_OK);
       executable = true;
-    } catch (e) {
+    } catch {
       executable = false;
     }
     

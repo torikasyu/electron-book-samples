@@ -3,7 +3,7 @@ import * as path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { getConfig } from './config';
-import { ImageInfo, ImageUploadResult, ImageListResult, ImageDeleteResult } from '../../shared/types';
+import { ImageUploadResult, ImageListResult, ImageDeleteResult } from '../../shared/types';
 
 /**
  * Supabaseクライアントの初期化関数
@@ -85,7 +85,7 @@ export async function uploadImage(filePath: string): Promise<ImageUploadResult> 
     });
     
     // Supabaseのストレージにアップロード
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(bucketName)
       .upload(`public/${safeFileName}`, fileContent, {
         contentType,
@@ -140,10 +140,10 @@ export async function getImages(): Promise<ImageListResult> {
         .getPublicUrl(`public/${file.name}`);
         
       return {
-        id: file.id,
+        id: file.id ?? file.name,
         name: file.name,
         url: publicUrl,
-        createdAt: file.created_at,
+        createdAt: file.created_at ?? '',
         size: file.metadata?.size || 0,
         type: path.extname(file.name).substring(1),
       };
